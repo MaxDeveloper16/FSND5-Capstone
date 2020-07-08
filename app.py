@@ -289,6 +289,13 @@ def unknown(error):
         "message": "Unknown server error"
     }), 500
 
+@app.errorhandler(AuthError)
+def authentification_failed(AuthError): 
+    return jsonify({
+        "success": False, 
+        "error": AuthError.status_code,
+        "message": AuthError.error['description']
+        }), AuthError.status_code
 
 
 
