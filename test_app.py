@@ -216,6 +216,84 @@ class TestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 401)
         self.assertFalse(data['success'])
 
+#----------------------------------------------------------------------------#
+# Tests for /actors/<int:actor_id> PATCH
+#----------------------------------------------------------------------------#
+    def test_update_actor(self):
+        """Test PATCH existing actors"""
+        update_actor_with_new_age = {
+            'age' : 30
+        } 
+        res = self.client().patch('/actors/1', json = update_actor_with_new_age, headers = casting_director_auth_header)
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertTrue(data['success'])
+
+
+    def test_error401_update_actor_by_assistant(self):
+        """Test PATCH existing actors"""
+        update_actor_with_new_age = {
+            'age' : 30
+        } 
+
+        res = self.client().patch('/actors/1', json = update_actor_with_new_age, headers = casting_assistant_auth_header)
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 401)
+        self.assertFalse(data['success'])
+
+#----------------------------------------------------------------------------#
+# Tests for /movies/<int:movie_id> PATCH
+#----------------------------------------------------------------------------#
+    def test_update_movie(self):
+        """Test PATCH existing movies"""
+        update_actor_with_new_release_date = {
+            'release_date' : '2020-10-01'
+        } 
+
+        res = self.client().patch('/movies/1', json = update_actor_with_new_release_date, headers = casting_director_auth_header)
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+
+
+    def test_error401_update_movie_by_assistant(self):
+        """Test PATCH existing movies"""
+        update_actor_with_new_release_date = {
+            'release_date' : '2020-10-01'
+        } 
+
+        res = self.client().patch('/movies/1', json = update_actor_with_new_release_date, headers = casting_assistant_auth_header)
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 401)
+        self.assertFalse(data['success'])
+
+#----------------------------------------------------------------------------#
+# Tests for /actors/<int:actor_id> DELETE
+#----------------------------------------------------------------------------#
+    def test_delete_movie(self):
+        """Test DELETE existing movie"""
+        res = self.client().delete('/movies/1', headers = executive_producer_auth_header)
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 200)
+        self.assertTrue(data['success'])
+
+
+    def test_error_404_delete_movie(self):
+        """Test DELETE existing movie w/o Authorization"""
+        res = self.client().delete('/movie/1')
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 404)
+        self.assertFalse(data['success'])
+        self.assertEqual(data['message'], 'Resource not found')
+
+#----------------------------------------------------------------------------#
+# Tests for /movies/<int:movie_id> DELETE
+#----------------------------------------------------------------------------#
 
 
 if __name__ == "__main__":
