@@ -6,6 +6,7 @@ import logging
 from sqlalchemy import func
 from werkzeug.exceptions import HTTPException
 from models import db_drop_and_create_all, setup_db, Actor, Movie, Performance
+from auth.auth import AuthError, requires_auth
 
 
 #----------------------------------------------------------------------------#
@@ -37,7 +38,8 @@ def after_request(response):
 #----------------------------------------------------------------------------#
 
 @app.route('/actors', methods=['GET'])
-def get_actors():
+@requires_auth('get:actors')
+def get_actors(payload):
   try:
       all_actors = Actor.query.order_by(Actor.id).all()
       actors = [{"name": actor.name, "age": actor.age,
@@ -51,7 +53,8 @@ def get_actors():
         abort(500)
 
 @app.route('/actors', methods=['POST'])
-def add_actor():
+@requires_auth('post:actor')
+def add_actor(payload):
     data = request.get_json()
     name = data.get("name", None)
     gender = data.get("gender", None)
@@ -74,8 +77,8 @@ def add_actor():
         abort(500)
 
 @app.route('/actors/<int:actor_id>', methods=['PATCH'])
-# @requires_auth('patch:actors')
-def update_actor(actor_id):
+@requires_auth('patch:actor')
+def update_actor(payload, actor_id):
 
     actor = Actor.query.filter(Actor.id == actor_id).one_or_none()
 
@@ -113,8 +116,8 @@ def update_actor(actor_id):
         abort(422)
 
 @app.route('/actors/<int:actor_id>', methods=['DELETE'])
-# @requires_auth('delete:actors')
-def delete_actor(actor_id):
+@requires_auth('delete:actor')
+def delete_actor(payload, actor_id):
 
     actor = Actor.query.filter(Actor.id == actor_id).one_or_none()
 
@@ -129,8 +132,9 @@ def delete_actor(actor_id):
     }), 200
 
 
-@app.route('/movies')
-def get_movies():
+@app.route('/movies', methods=['GET'])
+@requires_auth('get:movies')
+def get_movies(payload):
     try:
         all_movies = Movie.query.order_by(Movie.id).all()
 
@@ -145,7 +149,8 @@ def get_movies():
         abort(422)
 
 @app.route('/movies', methods=['POST'])
-def add_movies():
+@requires_auth('post:movie')
+def add_movies(payload):
     data = request.get_json()
     title = data.get("title", None)
     release_date = data.get("release_date", None)
@@ -166,8 +171,8 @@ def add_movies():
         abort(500)
 
 @app.route('/movies/<int:movie_id>', methods=['PATCH'])
-# @requires_auth('patch:actors')
-def update_movie(movie_id):
+@requires_auth('patch:movie')
+def update_movie(payload, movie_id):
 
     movie = Movie.query.filter(Movie.id == movie_id).one_or_none()
 
@@ -201,8 +206,8 @@ def update_movie(movie_id):
         abort(422)
 
 @app.route('/movies/<int:movie_id>', methods=['DELETE'])
-# @requires_auth('delete:movies')
-def delete_moive(movie_id):
+@requires_auth('delete:movie')
+def delete_moive(payload, movie_id):
 
     movie = Movie.query.filter(Movie.id == movie_id).one_or_none()
 
@@ -217,6 +222,72 @@ def delete_moive(movie_id):
     }), 200
 
 
+## Error Handling
+'''
+Implement error handlers using the @app.errorhandler(error) decorator
+    each error handler should return (with approprate messages):
+             jsonify({
+                    "success": False, 
+                    "error": 404,
+                    "message": "resource not found"
+                    }), 404
+
+'''
+@app.errorhandler(400)
+def bad_request(error):
+    return jsonify({
+        "success": False,
+        "error": 400,
+        "message": "Bad Request"
+    }), 400
+
+@app.errorhandler(401)
+def unauthorized(error):
+    return jsonify({
+        "success": False,
+        "error": 401,
+        "message": "Unauthorized"
+    }), 401
+
+@app.errorhandler(403)
+def forbidden(error):
+    return jsonify({
+        "success": False,
+        "error": 403,
+        "message": "Forbidden"
+    }), 403
+
+@app.errorhandler(404)
+def not_found(error):
+    return jsonify({
+        "success": False,
+        "error": 404,
+        "message": "Resource not found"
+    }), 404
+
+@app.errorhandler(405)
+def method_not_allowed(error):
+    return jsonify({
+        "success": False,
+        "error": 405,
+        "message": "Method not allowed"
+    }), 405
+
+@app.errorhandler(422)
+def unprocessable(error):
+    return jsonify({
+        "success": False,
+        "error": 422,
+        "message": "Unprocessable"
+    }), 422
+
+@app.errorhandler(500)
+def unknown(error):
+    return jsonify({
+        "success": False,
+        "error": 500,
+        "message": "Unknown server error"
+    }), 500
 
 
 
