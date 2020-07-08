@@ -128,6 +128,94 @@ class TestCase(unittest.TestCase):
         self.assertEqual(res.status_code, 401)
         self.assertFalse(data['success'])
 
+#----------------------------------------------------------------------------#
+# Tests for /actors POST
+#----------------------------------------------------------------------------#
+    def test_add_actor_by_director(self):
+        """Test POST add actor."""
+
+        new_actor = {
+            'name' : 'David',
+            'gender' : 'Male',
+            'age' : 25
+        } 
+
+        res = self.client().post('/actors', json = new_actor, headers = casting_director_auth_header)
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 201)
+
+    def test_add_actor_by_producer(self):
+        """Test POST add actor."""
+
+        new_actor = {
+            'name' : 'Lucy',
+            'gender' : 'Female',
+            'age' : 22
+        } 
+
+        res = self.client().post('/actors', json = new_actor, headers = executive_producer_auth_header)
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 201)
+
+    def test_error401_add_actor_by_assistant(self):
+        """Test POST add actor."""
+
+        new_actor = {
+            'name' : 'Leo',
+            'gender' : 'Male',
+            'age' : 22
+        } 
+        res = self.client().post('/actors', json = new_actor, headers = casting_assistant_auth_header)
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 401)
+        self.assertFalse(data['success'])
+
+#----------------------------------------------------------------------------#
+# Tests for /movies POST
+#----------------------------------------------------------------------------#
+    def test_add_movie_by_director(self):
+        """Test POST add movie."""
+
+        new_movie = {
+            'title' : 'X-Man',
+            'release_date' : '2015-09-01'
+        } 
+
+        res = self.client().post('/movies', json = new_movie, headers = casting_director_auth_header)
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 201)
+        
+    def test_add_movie_by_producer(self):
+        """Test POST add movie."""
+
+        new_movie = {
+            'title' : 'Panda',
+            'release_date' : '2018-10-01'
+        } 
+
+        res = self.client().post('/movies', json = new_movie, headers = executive_producer_auth_header)
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 201)
+
+    def test_error401_add_movie_by_assistant(self):
+        """Test POST add movie."""
+
+        new_movie = {
+            'title' : 'Nemo',
+            'release_date' : '2010-01-01'
+        } 
+
+        res = self.client().post('/movies', json = new_movie, headers = casting_assistant_auth_header)
+        data = json.loads(res.data)
+
+        self.assertEqual(res.status_code, 401)
+        self.assertFalse(data['success'])
+
 
 
 if __name__ == "__main__":
