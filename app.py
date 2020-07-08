@@ -46,7 +46,7 @@ def get_actors(payload):
                        "gender": actor.gender}
                       for actor in all_actors]
 
-      return jsonify({"sucess":True,"actors":actors})
+      return jsonify({"success":True,"actors":actors})
 
   except Exception as e:
         logging.exception(e)
