@@ -1,5 +1,5 @@
 import os
-from flask import Flask, request, abort, jsonify
+from flask import Flask, request, abort, jsonify, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
 import logging
@@ -7,6 +7,7 @@ from sqlalchemy import func
 from werkzeug.exceptions import HTTPException
 from models import db_drop_and_create_all, setup_db, Actor, Movie, Performance
 from auth.auth import AuthError, requires_auth
+
 
 
 #----------------------------------------------------------------------------#
@@ -36,6 +37,9 @@ def after_request(response):
 #----------------------------------------------------------------------------#
 # Controllers.
 #----------------------------------------------------------------------------#
+@app.route('/')
+def index():
+  return render_template('pages/home.html')
 
 @app.route('/actors', methods=['GET'])
 @requires_auth('get:actors')

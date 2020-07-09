@@ -7,11 +7,17 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 DEBUG = True
 
 # Connect to the database
+DB_NAME = "CastingAgency"
+DB_USER = "postgres"
+DB_HOST = "localhost:5432"
+DB_PASSWORD = "root"
 
+database_path = 'postgres://{}:{}@{}/{}'.format(
+  DB_USER,DB_PASSWORD,DB_HOST, DB_NAME)
 
 #DATABASE URL
 database_config = {
-    "SQLALCHEMY_DATABASE_URI" : 'postgres://postgres:root@localhost:5432/CastingAgency',
+    "SQLALCHEMY_DATABASE_URI" : database_path,
     "SQLALCHEMY_TRACK_MODIFICATIONS" : False,
     "SQLALCHEMY_ECHO" : True   
 }

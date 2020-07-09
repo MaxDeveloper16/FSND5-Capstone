@@ -3,20 +3,13 @@ from sqlalchemy import Column, String, Integer, create_engine, Date, Float
 from flask_sqlalchemy import SQLAlchemy
 import json
 from datetime import date
-
-DB_NAME = "CastingAgency"#os.getenv('DB_NAME')
-DB_USER = "postgres"#os.getenv('DB_USER')
-DB_HOST = "localhost:5432"#os.getenv('DB_HOST')
-DB_PASSWORD = "root"#os.getenv('DB_PASSWORD')
-
-database_path = 'postgres://{}:{}@{}/{}'.format(
-  DB_USER,DB_PASSWORD,DB_HOST, DB_NAME)
+from config import database_config
 
 db = SQLAlchemy()
 #----------------------------------------------------------------------------#
 # Database Setup 
 #----------------------------------------------------------------------------#
-def setup_db(app, database_uri=database_path):
+def setup_db(app, database_uri=database_config['SQLALCHEMY_DATABASE_URI']):
     '''binds a flask application and a SQLAlchemy service'''
     app.config["SQLALCHEMY_DATABASE_URI"] = database_uri
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False

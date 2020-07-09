@@ -175,20 +175,7 @@ class TestCase(unittest.TestCase):
 
 #----------------------------------------------------------------------------#
 # Tests for /movies POST
-#----------------------------------------------------------------------------#
-    def test_add_movie_by_director(self):
-        """Test POST add movie."""
-
-        new_movie = {
-            'title' : 'X-Man',
-            'release_date' : '2015-09-01'
-        } 
-
-        res = self.client().post('/movies', json = new_movie, headers = casting_director_auth_header)
-        data = json.loads(res.data)
-
-        self.assertEqual(res.status_code, 201)
-        
+#----------------------------------------------------------------------------#      
     def test_add_movie_by_producer(self):
         """Test POST add movie."""
 
