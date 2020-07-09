@@ -199,7 +199,7 @@ def update_movie(payload, movie_id):
 
         return jsonify({
             'success': True,
-            'actor': new_movie,
+            'movie': new_movie,
         }), 200
 
     except Exception:
