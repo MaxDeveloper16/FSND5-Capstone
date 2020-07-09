@@ -200,4 +200,10 @@ To run the tests in your terminal
 ```bash
 
 pytest test_app.py
-`````
+```
+
+## Testing endpoint with postman
+
+Import the postman collection `FSDN-Capstone.postman_collection.json`
+ 
+Running Collections with Heroku URL to test endpoint.
