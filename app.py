@@ -42,7 +42,7 @@ def after_request(response):
 def get_actors(payload):
   try:
       all_actors = Actor.query.order_by(Actor.id).all()
-      actors = [{"name": actor.name, "age": actor.age,
+      actors = [{"id":actor.id,"name": actor.name, "age": actor.age,
                        "gender": actor.gender}
                       for actor in all_actors]
 
