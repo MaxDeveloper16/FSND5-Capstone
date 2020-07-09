@@ -10,11 +10,12 @@ DEBUG = True
 DB_NAME = "CastingAgency"
 DB_USER = "postgres"
 DB_HOST = "localhost:5432"
-DB_PASSWORD = "root"
+DB_PASSWORD = "password"
 
 local_database_url = 'postgres://{}:{}@{}/{}'.format(
   DB_USER,DB_PASSWORD,DB_HOST, DB_NAME)
 
+#Heroku postgres database url
 heroku_database_url = 'postgres://sfrewkehiyakjq:cc78f94900b9b18f3efef7219f64e1c709278dd6b3c01a98ec8876c0ffc9e077@ec2-34-202-88-122.compute-1.amazonaws.com:5432/dfiodra0hdo4p8'
 
 #DATABASE URL
