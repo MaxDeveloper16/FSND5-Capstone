@@ -37,10 +37,6 @@ def after_request(response):
 #----------------------------------------------------------------------------#
 # Controllers.
 #----------------------------------------------------------------------------#
-@app.route('/')
-def index():
-  return render_template('pages/home.html')
-
 @app.route('/actors', methods=['GET'])
 @requires_auth('get:actors')
 def get_actors(payload):
